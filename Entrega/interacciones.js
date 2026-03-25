@@ -2,7 +2,7 @@ let vidaActual = 100;
 let cooldownsTime = 5; //segundos
 const MAX_HEALTH = 150; // máximo de vida usado para calcular el relleno
 
-// Character health data
+// Para storear la vida de cada personaje y añadirles la imagen
 const characterHealth = [100, 85, 70, 120];
 const characterPortraits = [
   'media/120px-Portrait_Shadowheart.png.webp',
@@ -11,6 +11,7 @@ const characterPortraits = [
   'media/120px-Portrait_Karlach.png.webp'
 ];
 let selectedCharacter = 0;
+// Se inicializa a cero porque es lo que controla luego el cambio
 
 // Initialize character health display
 function initCharacterHealth() {

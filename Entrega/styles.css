@@ -9,8 +9,11 @@ body {
   position: fixed;
   inset: 0;
   pointer-events: none; 
-  background-color: #555;
+  background-image: url("media/baldursgate3-2048px-77504-2x1-1.webp");
+  background-size: cover;
+  /* background-color: #555; */
 }
+
 
 /* party*/
 #party-container {

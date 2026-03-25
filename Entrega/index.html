@@ -21,6 +21,8 @@
 //https://fonts.google.com/specimen/Alegreya -->
 
 
+<!-- PONER LA FONT, PONER EL RECUADRO DE LOS PERSONAJES EN DORADO. PONER LA ANIM DEL MAPA, HACEMOS COMO QUE VA A SITIOS RANDOM. PONER LA ANIM DEL COOL DOWN CON EL HEGHT EN DIVISIONES DE 20/100. PONER EL CIRCULO DE VIDA.  -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,6 +35,10 @@
      <!-- CONTENEDOR GLOBAL -->
   <div id="general-container">
 
+    <!-- <div id="gameplay-image"> 
+      <div class="background-image" style="background-image: url('Entrega\media\baldursgate3-2048px-77504-2x1-1.webp')"></div>
+    </div> AL FINAL LO HICE EN EL CSS-->
+
     <!-- //personajes -->
     <div id="party-container">
       <div class="character-slot active" style="background-image: url('media/120px-Portrait_Shadowheart.png.webp')"><span class="character-health"></span></div>
@@ -42,17 +48,19 @@
     </div>
 
     <!-- //minimapa -->
+     <!-- Aquí ponemos solo la imagen y un degradadito alrededor -->
     <div id="minimap-container">
-      <div id="niebla-overlay"></div>
+      <div id="niebla-overlay"></div>  
     </div>
 
     <!-- //personajes -->
+    <!-- Lo intentamos hacer dinámico para que se actualice según lo que se seleccione pero si no se puede, pues bueno -->
     <div id="character-circle">
       <div id="secondary-health-container">
         <div id="secondary-health-circle" style="background-image: url('media/Class_Paladin_Hotbar_Icon.png')">
         </div>
       </div>
-
+      <!-- Miércoles: queda esto -->
       <div id="health-container">
         <div id="health-circle" style="background-image: url('media/120px-Portrait_Shadowheart.png.webp')">
           <span id="health-text">
@@ -61,6 +69,7 @@
             </text>
         </div>
       </div>
+      <!-- Alex no se que has hecho aquí pero se rompe si se quita así que lo mantenemos -->
 
       <!-- //items especiales y habilidades -->
       <div id="grid-background">
@@ -73,6 +82,9 @@
         <!-- //habilidades e items -->
         <div id="skills-container">
           <div id="skills-group-8">
+            <div class="skill"><span class="cooldown-text"></span>
+            </div>
+            <div class="skill"><span class="cooldown-text" style="background-image: url('media/300px-Pike_+2_Faded.png.webp')"></span></div>
             <div class="skill"><span class="cooldown-text"></span></div>
             <div class="skill"><span class="cooldown-text"></span></div>
             <div class="skill"><span class="cooldown-text"></span></div>
@@ -80,9 +92,7 @@
             <div class="skill"><span class="cooldown-text"></span></div>
             <div class="skill"><span class="cooldown-text"></span></div>
             <div class="skill"><span class="cooldown-text"></span></div>
-            <div class="skill"><span class="cooldown-text"></span></div>
-            <div class="skill"><span class="cooldown-text"></span></div>
-            <div class="skill"><span class="cooldown-text"></span></div>
+            <div class="skill"><span class="cooldown-text" style="background-image: url('media/300px-Pike_+2_Faded.png.webp')"></span></div>
             <div class="skill"><span class="cooldown-text"></span></div>
             <div class="skill"><span class="cooldown-text"></span></div>
             <div class="skill"><span class="cooldown-text"></span></div>
