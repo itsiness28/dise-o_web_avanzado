@@ -1,5 +1,6 @@
 let vidaActual = 100;
 let cooldownsTime = 5; //segundos
+const MAX_HEALTH = 150; // máximo de vida usado para calcular el relleno
 
 // Character health data
 const characterHealth = [100, 85, 70, 120];
@@ -26,26 +27,36 @@ function initCharacterHealth() {
 function updateMainHealthCircle() {
   const healthText = document.querySelector('#health-text text');
   const healthCircle = document.querySelector('#health-circle');
-  const maxHealth = 150;
-  healthText.textContent = characterHealth[selectedCharacter] + ' / ' + maxHealth;
+  const healthFill = document.querySelector('#health-fill');
+
+  const current = characterHealth[selectedCharacter];
+  healthText.textContent = current + ' / ' + MAX_HEALTH;
   healthCircle.style.backgroundImage = `url('${characterPortraits[selectedCharacter]}')`;
+
+  // Calcular porcentaje y ajustar altura del overlay rojo (desde abajo)
+  let percent = (current / MAX_HEALTH) * 100;
+  if (percent < 0) percent = 0;
+  if (percent > 100) percent = 100;
+  if (healthFill) {
+    healthFill.style.height = percent + '%';
+  }
 }
 
 // Initialize on page load
 initCharacterHealth();
 
-// Object to track cooldown state for each skill
+// Object to track cooldown state for each interactive button
 const skillCooldowns = {};
 
-// Get all skill elements
-const skills = document.querySelectorAll('.skill');
+// Select all interactive buttons: skills (no placeholders) and special items
+const interactiveButtons = document.querySelectorAll('.skill:not(.empty), .special-item');
 
-skills.forEach((skill, index) => {
-  // Initialize cooldown state for this skill
-  skillCooldowns[index] = { active: false, remaining: 0 };
-  
+interactiveButtons.forEach((btn, index) => {
+  // Initialize cooldown state for this button
+  skillCooldowns[index] = { active: false, remaining: 0, interval: null };
+
   // Add click listener
-  skill.addEventListener('click', function() {
+  btn.addEventListener('click', function() {
     // Only allow click if not on cooldown
     if (!skillCooldowns[index].active) {
       startCooldown(index);
@@ -53,28 +64,40 @@ skills.forEach((skill, index) => {
   });
 });
 
-function startCooldown(skillIndex) {
-  const skill = skills[skillIndex];
-  const cooldownText = skill.querySelector('.cooldown-text');
-  
+function startCooldown(buttonIndex) {
+  const btn = interactiveButtons[buttonIndex];
+  // Ensure cooldown text element exists
+  let cooldownText = btn.querySelector('.cooldown-text');
+  if (!cooldownText) {
+    cooldownText = document.createElement('span');
+    cooldownText.className = 'cooldown-text';
+    btn.appendChild(cooldownText);
+  }
+
   // Mark as active
-  skillCooldowns[skillIndex].active = true;
-  skillCooldowns[skillIndex].remaining = cooldownsTime;
-  skill.classList.add('on-cooldown');
-  
+  skillCooldowns[buttonIndex].active = true;
+  skillCooldowns[buttonIndex].remaining = cooldownsTime;
+  btn.classList.add('on-cooldown');
+
   // Update the text to show countdown
-  cooldownText.textContent = skillCooldowns[skillIndex].remaining;
-  
+  cooldownText.textContent = skillCooldowns[buttonIndex].remaining;
+
+  // Clear any existing interval just in case
+  if (skillCooldowns[buttonIndex].interval) {
+    clearInterval(skillCooldowns[buttonIndex].interval);
+  }
+
   // Create interval to countdown
-  const interval = setInterval(() => {
-    skillCooldowns[skillIndex].remaining--;
-    cooldownText.textContent = skillCooldowns[skillIndex].remaining;
-    
+  skillCooldowns[buttonIndex].interval = setInterval(() => {
+    skillCooldowns[buttonIndex].remaining--;
+    cooldownText.textContent = skillCooldowns[buttonIndex].remaining;
+
     // When countdown reaches 0
-    if (skillCooldowns[skillIndex].remaining <= 0) {
-      clearInterval(interval);
-      skillCooldowns[skillIndex].active = false;
-      skill.classList.remove('on-cooldown');
+    if (skillCooldowns[buttonIndex].remaining <= 0) {
+      clearInterval(skillCooldowns[buttonIndex].interval);
+      skillCooldowns[buttonIndex].interval = null;
+      skillCooldowns[buttonIndex].active = false;
+      btn.classList.remove('on-cooldown');
       cooldownText.textContent = '';
     }
   }, 1000);
