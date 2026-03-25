@@ -1,4 +1,4 @@
-//INES -> Hacer lay
+<!-- //INES -> Hacer layout de cada elemento, containers, divs etc
 
 //ALEX -> ICONOS Y COOL DOWN
 //Pra los iconos y su cooldown. hacemos contador de tiempo de cooldown ,timer,la spritesheet colocada en cada sitio. 
@@ -18,7 +18,7 @@
 //HACER REGLA DE TRES PARA CALCULARLO PORCENTUALMENTE PARA EL PORCENTAJE DE VISIÓN DEL CÍRCULO
 //AAAAAAAAAAAAAAAAA
 
-//https://fonts.google.com/specimen/Alegreya
+//https://fonts.google.com/specimen/Alegreya -->
 
 
 <!DOCTYPE html>
@@ -26,9 +26,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>HUD BALDURS</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    
+     <!-- CONTENEDOR GLOBAL -->
+  <div id="general-container">
+
+    <!-- //personajes -->
+    <div id="party-container">
+      <div class="character-slot"></div>
+      <div class="character-slot"></div>
+      <div class="character-slot"></div>
+      <div class="character-slot"></div>
+    </div>
+
+    <!-- //minimapa -->
+    <div id="minimap-container">
+      <div id="niebla-overlay"></div>
+    </div>
+
+    <!-- //personajes -->
+    <div id="character-circle">
+      <div id="health-container">
+        <div id="health-circle">
+          <span id="health-text">
+            <text>
+                vidaActual / 100
+            </text>
+        </div>
+      </div>
+
+      <!-- //habilidades -->
+      <div id="skills-container">
+        <div class="skill"></div>
+        <div class="skill"></div>
+        <div class="skill"></div>
+        <div class="skill"></div>
+        <div class="skill"></div>
+      </div>
+
+      <!-- //items -->
+      <div id="items-container">
+        <div class="item"></div>
+        <div class="item"></div>
+        <div class="item"></div>
+      </div>
+
+    </div>
+
+  </div>
 </body>
 </html>
