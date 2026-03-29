@@ -81,16 +81,16 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px; /* reducido de 40px para acercar los elementos entre sí */
-  padding: 10px; /* reducido de 20px */
+  gap: 40px;
+  padding: 20px;
 }
 
 /* VIDA SECUNDARIA */
 #secondary-health-container {
   width: 91px;
   height: 91px;
-  margin-right: 8px; /* ajustado para acercarlo más al centro */
-  margin-top: 32px; /* aumentado para bajar el círculo del paladin */
+  margin-right: 60px;
+  margin-top: 20px;
 }
 
 #secondary-health-circle {
@@ -99,7 +99,6 @@ body {
   border-radius: 50%;
   background: #115e7c;
   position: relative;
-  z-index: 20; /* poner por delante del círculo de vida */
   overflow: hidden;
   background-size: cover;
   background-position: center;
@@ -110,7 +109,7 @@ body {
 #health-container {
   width: 120px;
   height: 120px;
-  margin-left: -20px; /* menos negativo para acercarlo al marco */
+  margin-left: -70px;
 }
 
 #health-circle {
@@ -119,7 +118,6 @@ body {
   border-radius: 50%;
   background: #111;
   position: relative;
-  z-index: 5; /* asegurar que quede detrás del secundario */
   overflow: visible;
   background-size: cover;
   background-position: center;
@@ -167,9 +165,7 @@ body {
   bottom: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255,0,0,0.25); /* 25% opacity */
-  transition: height 300ms ease; /* animación suave al cambiar vida */
-  pointer-events: none;
+  background: rgba(255,0,0,0.6);
 }
 
 #health-text {
@@ -185,12 +181,11 @@ body {
 /* ITEMS ESPECIALES Y HABILIDADES - FONDO */
 #grid-background {
   display: flex;
-  gap: 20px; /* reducido de 40px para acercar el marco de habilidades a los círculos */
+  gap: 40px;
   padding: 10px 20px;
   background: rgba(0, 0, 0, 0.5);
   border-radius: 8px;
   border: 4px solid #8B0000;
-  transform: translateY(-12px); /* subir un poco el encuadre y su contenido */
 }
 
 /* ITEMS ESPECIALES */
@@ -212,39 +207,15 @@ body {
 
 /* HABILIDADES E ITEMS */
 #skills-container {
-  display: flex; /* ahora contiene tres subgrupos: 8x3, 6x3 y 2x3 */
-  gap: 12px;
-  align-items: start;
-}
-
-/* Grupo grande: 8 columnas x 3 filas */
-#skills-group-8 {
   display: grid;
-  grid-template-columns: repeat(8, 44px);
-  grid-template-rows: repeat(3, 44px);
-  gap: 6px;
+  grid-template-columns: repeat(8, 60px);
+  grid-template-rows: repeat(2, 60px);
+  gap: 10px;
 }
 
-/* Grupo medio: 6 columnas x 3 filas */
-#skills-group-6 {
-  display: grid;
-  grid-template-columns: repeat(6, 44px);
-  grid-template-rows: repeat(3, 44px);
-  gap: 6px;
-}
-
-/* Grupo pequeño: 2 columnas x 3 filas */
-#skills-group-2 {
-  display: grid;
-  grid-template-columns: repeat(2, 44px);
-  grid-template-rows: repeat(3, 44px);
-  gap: 6px;
-}
-
-/* Estilo de cada botón reducido */
 .skill {
-  width: 44px; /* reducido */
-  height: 44px; /* reducido */
+  width: 60px;
+  height: 60px;
   background: #444;
   border: 2px solid #aaa;
   pointer-events: auto;
@@ -252,29 +223,19 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
 }
 
-/* Estilo para cualquier elemento en cooldown (skill o special-item) */
-.on-cooldown {
+.skill.on-cooldown {
   background: rgba(128, 128, 128, 0.5);
 }
 
 .cooldown-text {
   color: white;
-  font-size: 14px; /* algo más pequeño para ajustar */
+  font-size: 18px;
   font-weight: bold;
   display: none;
 }
 
-.on-cooldown .cooldown-text {
+.skill.on-cooldown .cooldown-text {
   display: block;
-}
-
-/* Compatibilidad: si no usas subgrupos, mantén un grid por defecto (8x2 reducido a 8x3) */
-#skills-container.default-grid {
-  display: grid;
-  grid-template-columns: repeat(8, 44px);
-  grid-template-rows: repeat(3, 44px);
-  gap: 6px;
 }
