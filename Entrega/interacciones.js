@@ -1,3 +1,4 @@
+let vidaActual = 100;
 let cooldownsTime = 5; //segundos
 const MAX_HEALTH = 150; // máximo de vida usado para calcular el relleno
 
@@ -12,10 +13,10 @@ const characterPortraits = [
 let selectedCharacter = 0;
 // Se inicializa a cero porque es lo que controla luego el cambio
 
-// para traquear los cooldowns
+// Object to track cooldown state for each interactive button
 const skillCooldowns = {};
 
-
+// ================== TILESET SYSTEM ==================
 const TILESET_CONFIG = {
   cols: 32,        // 32 columnas
   rows: 32,        // 32 filas
@@ -24,11 +25,6 @@ const TILESET_CONFIG = {
   imgHeight: 2048,
   displaySize: 1408 // Tamaño de visualización en background-size (44/64 * 2048)
 };
-
-
-// Hasta aquí las vars/cons. 
-
-
 
 // Función para establecer el icono del tileset en un elemento
 function setTilesetIcon(element, iconIndex) {
@@ -62,8 +58,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize character health display
   function initCharacterHealth() {
-    const healthTexts = document.querySelectorAll('#party-container .character-health');
-    const characterSlots = document.querySelectorAll('#party-container .character-slot');
+    const healthTexts = document.querySelectorAll('.character-health');
+    const characterSlots = document.querySelectorAll('.character-slot');
+    
     healthTexts.forEach((health, index) => {
       health.textContent = characterHealth[index];
       
@@ -78,22 +75,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Update main health circle
   function updateMainHealthCircle() {
-    const healthText = document.querySelector('#health-text');
+    const healthText = document.querySelector('#health-text text');
     const healthCircle = document.querySelector('#health-circle');
     const healthFill = document.querySelector('#health-fill');
 
     const current = characterHealth[selectedCharacter];
-    if (healthText) {
-      healthText.textContent = current + ' / ' + MAX_HEALTH;
-    }
+    healthText.textContent = current + ' / ' + MAX_HEALTH;
     healthCircle.style.backgroundImage = `url('${characterPortraits[selectedCharacter]}')`;
 
-    // Calcular porcentaje de daño y ajustar altura del overlay rojo (desde abajo), porcentualmente
-    const damagePercent = ((MAX_HEALTH - current) / MAX_HEALTH) * 100; 
+    // Calcular porcentaje de daño y ajustar altura del overlay rojo (desde abajo)
+    const damagePercent = ((MAX_HEALTH - current) / MAX_HEALTH) * 100;
     healthCircle.style.setProperty('--damage-height', damagePercent + '%');
     
     let percent = (current / MAX_HEALTH) * 100;
-    // capear valores
     if (percent < 0) percent = 0;
     if (percent > 100) percent = 100;
     if (healthFill) {
@@ -103,54 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize character health
   initCharacterHealth();
-
-  // AUDIO (Y parches)
-
-  const menuAudio = new Audio('media/audio/BALDURS GATE 3 Main Theme Full _ Menu Music Extended Mix [DJYsaFelV-4].mp3');
-  menuAudio.loop = true;
-  menuAudio.volume = 1;
-  menuAudio.muted = false;
-  menuAudio.play().catch(() => {
-    // Autoplay con audio silenciado puede ser bloqueado, pero se ignorará.
-  });
-
-  const gameplayAudio = new Audio('media/audio/BALDURS GATE 3 Karlach Character Introduction Music  Unreleased Soundtrack.mp3');
-  gameplayAudio.loop = true;
-  gameplayAudio.volume = 1;
-
-  function startMenuAudio() {
-    if (menuAudio.paused) {
-      menuAudio.play().catch(() => {});
-    }
-    if (menuAudio.muted) {
-      menuAudio.muted = false;
-    }
-  }
-
-  function stopMenuAudio() {
-    if (!menuAudio.paused) {
-      menuAudio.pause();
-      menuAudio.currentTime = 0;
-    }
-  }
-
-  function startGameplayAudio() {
-    stopMenuAudio();
-    if (gameplayAudio.paused) {
-      gameplayAudio.currentTime = 0;
-      gameplayAudio.play().catch(() => {});
-    }
-  }
-
-  document.addEventListener('click', function firstUserInteraction(event) {
-    if (event.target === document.getElementById('start-button')) {
-      // Si el primer click es en el boton start, ignoro la musica del menu y reproduzco directamente la de gameplay.
-      document.removeEventListener('click', firstUserInteraction);
-      return;
-    }
-    startMenuAudio();
-    document.removeEventListener('click', firstUserInteraction);
-  });
 
   // Select all interactive buttons: only skills (no placeholders), NO special items
   const interactiveButtons = document.querySelectorAll('.skill:not(.empty)');
@@ -170,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function startCooldown(buttonIndex) {
     const btn = interactiveButtons[buttonIndex];
-    // se asegura de que tiene el texto cooldown y si no lo tiene, lo crea por si acasp
+    // Ensure cooldown text element exists
     let cooldownText = btn.querySelector('.cooldown-text');
     if (!cooldownText) {
       cooldownText = document.createElement('span');
@@ -178,77 +124,137 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.appendChild(cooldownText);
     }
 
-    // Marcado como activo
+    // Mark as active
     skillCooldowns[buttonIndex].active = true;
     skillCooldowns[buttonIndex].remaining = cooldownsTime;
     btn.classList.add('on-cooldown');
-    btn.style.setProperty('--cooldown-fill-height', '100%');
 
-    // Update del texto para mostrar el tiempo correcto
+    // Update the text to show countdown
     cooldownText.textContent = skillCooldowns[buttonIndex].remaining;
 
-    // Clear por si acaso
+    // Clear any existing interval just in case
     if (skillCooldowns[buttonIndex].interval) {
       clearInterval(skillCooldowns[buttonIndex].interval);
     }
 
-    // contador + fill
+    // Create interval to countdown
     skillCooldowns[buttonIndex].interval = setInterval(() => {
       skillCooldowns[buttonIndex].remaining--;
       cooldownText.textContent = skillCooldowns[buttonIndex].remaining;
-      const fillPercent = Math.max(0, (skillCooldowns[buttonIndex].remaining / cooldownsTime) * 100);
-      btn.style.setProperty('--cooldown-fill-height', fillPercent + '%');
 
-      // cuando llega a cero
+      // When countdown reaches 0
       if (skillCooldowns[buttonIndex].remaining <= 0) {
         clearInterval(skillCooldowns[buttonIndex].interval);
         skillCooldowns[buttonIndex].interval = null;
         skillCooldowns[buttonIndex].active = false;
         btn.classList.remove('on-cooldown');
-        btn.style.removeProperty('--cooldown-fill-height');
         cooldownText.textContent = '';
       }
     }, 1000);
   }
 
-  // Selección de personaje
+  // Character slot selection
   const characterSlots = document.querySelectorAll('.character-slot');
 
   characterSlots.forEach((slot, index) => {
     slot.addEventListener('click', function() {
+      // Remove active class from all slots
       characterSlots.forEach(s => s.classList.remove('active'));
       
-
+      // Add active class to clicked slot
       this.classList.add('active');
       
-      // Updatear el personaje
+      // Update selected character and health circle
       selectedCharacter = index;
       updateMainHealthCircle();
     });
   });
 
-  const menuInicio = document.getElementById('menu-inicio');
-  const gameplay = document.getElementById('gameplay');
-  const startButton = document.getElementById('start-button');
-  const closeButton = document.getElementById('close-button');
+  // ================== MINIMAPA INTERACTIVO ==================
+  const minimapImage = document.getElementById('minimap-image');
+  const minimapContainer = document.getElementById('minimap-container');
 
-  if (menuInicio && gameplay) {
-    gameplay.classList.remove('visible');
+  let minimapState = {
+    rotation: 0,
+    offsetX: 0,
+    offsetY: 0,
+    isDragging: false,
+    dragStartX: 0,
+    dragStartY: 0,
+    dragStartOffsetX: 0,
+    dragStartOffsetY: 0
+  };
 
-    if (startButton) {
-      startButton.addEventListener('click', () => {
-        menuInicio.classList.add('menu-hidden');
-        gameplay.classList.add('visible');
-        stopMenuAudio();
-        startKarlachAudio();
-      });
-    }
-
-    if (closeButton) {
-      closeButton.addEventListener('click', () => {
-        window.close();
-      });
-    }
+  // Función para calcular offsets iniciales y centrar la imagen
+  function centerMinimapImage() {
+    const containerSize = 270; // Tamaño del container en px
+    const imageSize = containerSize * minimapZoom;
+    const offset = (imageSize - containerSize) / 2;
+    
+    minimapState.offsetX = offset * 0.5; // Ajuste fino para mejor centrado
+    minimapState.offsetY = offset * 0.5; // Ajuste fino para mejor centrado
+    
+    updateMinimapTransform();
   }
 
+  // Función para actualizar el transform de la imagen
+  function updateMinimapTransform() {
+    minimapImage.style.transform = `translate(calc(-50% + ${minimapState.offsetX}px), calc(-50% + ${minimapState.offsetY}px)) rotate(${minimapState.rotation}deg)`;
+  }
+
+  // Variable para almacenar zoom dinámico
+  let minimapZoom = 1.8; // Comienza con 180% de zoom
+
+  // Función para actualizar zoom con scroll
+  function updateMinimapZoom(zoomLevel) {
+    minimapZoom = Math.max(0.8, Math.min(zoomLevel, 3)); // Limita entre 80% y 300%
+    minimapImage.style.width = (minimapZoom * 100) + '%';
+    minimapImage.style.height = (minimapZoom * 100) + '%';
+  }
+
+  // Centrar imagen al cargar
+  centerMinimapImage();
+
+  // Rotación con rueda del ratón (scroll) - con Shift para rotación
+  minimapContainer.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    
+    if (e.shiftKey) {
+      // Shift + Rueda = Rotación
+      minimapState.rotation += (e.deltaY > 0 ? 5 : -5);
+      minimapState.rotation = minimapState.rotation % 360;
+    } else {
+      // Rueda sin Shift = Zoom
+      updateMinimapZoom(minimapZoom + (e.deltaY > 0 ? -0.1 : 0.1));
+    }
+    
+    updateMinimapTransform();
+  }, { passive: false });
+
+  // Movimiento con arrastrar
+  minimapContainer.addEventListener('mousedown', (e) => {
+    minimapState.isDragging = true;
+    minimapState.dragStartX = e.clientX;
+    minimapState.dragStartY = e.clientY;
+    minimapState.dragStartOffsetX = minimapState.offsetX;
+    minimapState.dragStartOffsetY = minimapState.offsetY;
+    minimapContainer.style.cursor = 'grabbing';
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!minimapState.isDragging) return;
+    
+    const deltaX = e.clientX - minimapState.dragStartX;
+    const deltaY = e.clientY - minimapState.dragStartY;
+    
+    minimapState.offsetX = minimapState.dragStartOffsetX + deltaX;
+    minimapState.offsetY = minimapState.dragStartOffsetY + deltaY;
+    
+    updateMinimapTransform();
+  });
+
+  document.addEventListener('mouseup', () => {
+    minimapState.isDragging = false;
+    minimapContainer.style.cursor = 'grab';
+  });
 });
