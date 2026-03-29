@@ -35,10 +35,24 @@ body {
   cursor: pointer;
   position: relative;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   background-size: cover;
   background-position: center;
+  padding-bottom: 8px;
+  overflow: hidden;
+}
+
+.character-slot::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--damage-height, 0%);
+  background: rgba(255, 0, 0, 0.3);
+  z-index: 1;
+  transition: height 0.3s ease;
 }
 
 .character-slot.active {
@@ -50,6 +64,8 @@ body {
   font-size: 18px;
   font-weight: bold;
   text-align: center;
+  position: relative;
+  z-index: 2;
 }
 
 /* -------------------- */
@@ -59,11 +75,31 @@ body {
   position: absolute;
   top: 20px;
   right: 20px;
-  width: 180px;
-  height: 180px;
+  width: 270px;
+  height: 270px;
   border-radius: 50%;
   overflow: hidden;
   background: #222;
+  cursor: grab;
+  outline: 3px solid #FFD700;
+}
+
+#minimap-container:active {
+  cursor: grabbing;
+}
+
+#minimap-image {
+  position: absolute;
+  width: 180%;
+  height: 180%;
+  object-fit: contain;
+  object-position: center;
+  transform: translate(0, 0) rotate(0deg);
+  transition: transform 0.1s ease-out;
+  pointer-events: auto;
+  top: 50%;
+  left: 50%;
+  transform-origin: center center;
 }
 
 #niebla-overlay {
@@ -71,6 +107,8 @@ body {
   inset: 0;
   background: rgba(0,0,0,0.6);
   border-radius: 50%;
+  z-index: 10;
+  pointer-events: none;
 }
 
 /* -------------------- */
@@ -123,7 +161,7 @@ body {
   background: #111;
   position: relative;
   z-index: 5; /* asegurar que quede detrás del secundario */
-  overflow: visible;
+  overflow: hidden;
   background-size: cover;
   background-position: center;
   box-shadow: 0 0 0 15px #000;
@@ -142,6 +180,9 @@ body {
   -webkit-mask: 
     linear-gradient(#fff 0 0) content-box, 
     linear-gradient(#fff 0 0);
+  mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
@@ -150,18 +191,13 @@ body {
 #health-circle::after {
   content: '';
   position: absolute;
-  top: -15px;
-  left: -15px;
-  right: -15px;
-  bottom: -15px;
-  border-radius: 50%;
-  padding: 3px;
-  background: linear-gradient(180deg, #FFD700 0%, #000 100%);
-  -webkit-mask: 
-    linear-gradient(#fff 0 0) content-box, 
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--damage-height, 0%);
+  background: rgba(255, 0, 0, 0.3);
+  z-index: 1;
+  transition: height 0.3s ease;
   pointer-events: none;
 }
 
@@ -179,8 +215,7 @@ body {
   position: absolute;
   width: 100%;
   text-align: center;
-  top: 50%;
-  transform: translateY(-50%);
+  bottom: 15%;
   color: white;
   z-index: 10;
 }
@@ -246,8 +281,8 @@ body {
 
 /* Estilo de cada botón reducido */
 .skill {
-  width: 44px; /* reducido */
-  height: 44px; /* reducido */
+  width: 44px;
+  height: 44px;
   background: #444;
   border: 2px solid #aaa;
   pointer-events: auto;
@@ -258,9 +293,27 @@ body {
   font-size: 12px;
 }
 
+/* TILESET - Parte de imagen que se muestra */
+.skill.tileset {
+  background-image: url('media/3125-1696894452-1192171480.webp');
+  background-size: 1408px 1408px; /* Escala reducida para mostrar en 44x44 sin recortes */
+  background-repeat: no-repeat;
+  background-color: #222;
+}
+
 /* Estilo para cualquier elemento en cooldown (skill o special-item) */
 .on-cooldown {
   background: rgba(128, 128, 128, 0.5);
+}
+
+.on-cooldown::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(100, 100, 100, 0.4);
+  border-radius: 4px;
+  z-index: 1;
+  pointer-events: none;
 }
 
 .cooldown-text {
@@ -268,6 +321,8 @@ body {
   font-size: 14px; /* algo más pequeño para ajustar */
   font-weight: bold;
   display: none;
+  position: relative;
+  z-index: 2;
 }
 
 .on-cooldown .cooldown-text {
