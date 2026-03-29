@@ -7,7 +7,7 @@
 
 
 //ALEX -> CAMBIOS DE PERSONAJE
-//Se crean cuatro slots laterales (detro de un div), se hace otro listener en cada casilla, si se hace click en un icono, se vuelve este plateado y (OPCIONAL EH) se agranda levemente
+//Se crean cuatro slots laterales (flexbox: column )(detro de un div), se hace otro listener en cada casilla, si se hace click en un icono, se vuelve este plateado y (OPCIONAL EH) se agranda levemente
 
 // INES-> NIEBLA DE BATALLA
 //Se hace container circular con un radio igual a la imagen y se superpone un efecto de negro con alpha bajado, y hueco por dentro
@@ -21,124 +21,137 @@
 //https://fonts.google.com/specimen/Alegreya -->
 
 
-<!-- PONER LA FONT, PONER EL RECUADRO DE LOS PERSONAJES EN DORADO. PONER LA ANIM DEL MAPA, HACEMOS COMO QUE VA A SITIOS RANDOM. PONER LA ANIM DEL COOL DOWN CON EL HEGHT EN DIVISIONES DE 20/100. PONER EL CIRCULO DE VIDA.  -->
+<!-- TRABAJO POST CHRLA CON MAXI: PONER LA FONT, PONER EL RECUADRO DE LOS PERSONAJES EN DORADO. PONER LA ANIM DEL MAPA, HACEMOS COMO QUE VA A SITIOS RANDOM. PONER LA ANIM DEL COOL DOWN CON EL HEGHT EN DIVISIONES DE 20/100. PONER EL CIRCULO DE VIDA.  -->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HUD BALDURS</title>
+    <title>Baldur's Gate III</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
      <!-- CONTENEDOR GLOBAL -->
   <div id="general-container">
 
-    <!-- <div id="gameplay-image"> 
-      <div class="background-image" style="background-image: url('Entrega\media\baldursgate3-2048px-77504-2x1-1.webp')"></div>
-    </div> AL FINAL LO HICE EN EL CSS-->
-
-    <!-- //personajes -->
-    <div id="party-container">
-      <div class="character-slot active" style="background-image: url('media/120px-Portrait_Shadowheart.png.webp')"><span class="character-health"></span></div>
-      <div class="character-slot" style="background-image: url('media/120px-Portrait_Astarion.png.webp')"><span class="character-health"></span></div>
-      <div class="character-slot" style="background-image: url('media/120px-Portrait_Gale.png.webp')"><span class="character-health"></span></div>
-      <div class="character-slot" style="background-image: url('media/120px-Portrait_Karlach.png.webp')"><span class="character-health"></span></div>
-    </div>
-
-    <!-- //minimapa -->
-     <!-- Aquí ponemos solo la imagen y un degradadito alrededor -->
-    <div id="minimap-container">
-      <img id="minimap-image" src="media/baldurs-gate-city-map-1692030062555.jpg" alt="City Map">
-      <div id="niebla-overlay"></div>  
-    </div>
-
-    <!-- //personajes -->
-    <!-- Lo intentamos hacer dinámico para que se actualice según lo que se seleccione pero si no se puede, pues bueno -->
-    <div id="character-circle">
-      <div id="secondary-health-container">
-        <div id="secondary-health-circle" style="background-image: url('media/Class_Paladin_Hotbar_Icon.png')">
+    <div id="menu-inicio">
+      <div class="fondo-menuinicio" style="background-image: url('media/bg3-main-menu-wallpapers-1440p-1080p-v0-kn24xxhm1vib1.jpg')">
+        <div class="logo-menuinicio" style="background-image: url('media/logo_Baldus_Gate_III.webp')"></div>
+        <div class="menu-buttons">
+          <button id="start-button">Start</button>
+          <button id="close-button">Close</button>
         </div>
       </div>
-      <!-- Miércoles: queda esto -->
-      <div id="health-container">
-        <div id="health-circle" style="background-image: url('media/120px-Portrait_Shadowheart.png.webp')">
-          <span id="health-text">
-            <text>
-                vidaActual / 100
-            </text>
-        </div>
+    </div>
+
+    <div id="gameplay"> 
+      <!-- <div id="gameplay-image"> 
+        <div class="background-image" style="background-image: url('Entrega\media\baldursgate3-2048px-77504-2x1-1.webp')"></div>
+      </div> AL FINAL LO HICE EN EL CSS-->
+
+      <!-- //personajes -->
+      <div id="party-container">
+        <div class="character-slot active" style="background-image: url('media/120px-Portrait_Shadowheart.png.webp')"><span class="character-health"></span></div>
+        <div class="character-slot" style="background-image: url('media/120px-Portrait_Astarion.png.webp')"><span class="character-health"></span></div>
+        <div class="character-slot" style="background-image: url('media/120px-Portrait_Gale.png.webp')"><span class="character-health"></span></div>
+        <div class="character-slot" style="background-image: url('media/120px-Portrait_Karlach.png.webp')"><span class="character-health"></span></div>
       </div>
-      <!-- Alex no se que has hecho aquí pero se rompe si se quita así que lo mantenemos -->
 
-      <!-- //items especiales y habilidades -->
-      <div id="grid-background">
-        <!-- //items especiales -->
-        <div id="special-items-container">
-          <div class="special-item" style="background-image: url('media/300px-Pike_+2_Faded.png.webp')"></div>
-          <div class="special-item" style="background-image: url('media/300px-Rusty_Hand_Crossbow_Faded.png.webp')"></div>
-        </div>
+      <!-- //minimapa -->
+      <!-- Aquí ponemos solo la imagen y un degradadito alrededor -->
+      <div id="minimap-container">
+        <img id="minimap-image" src="media/baldurs-gate-city-map-1692030062555.jpg" alt="City Map">
+        <!-- <div id="niebla-overlay"></div>  Al final no pusimos la niebla pero tampoco se echaba de menos -->
+      </div>
 
-        <!-- //habilidades e items -->
-        <div id="skills-container">
-          <div id="skills-group-8">
-            <div class="skill" data-icon="1"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="51"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="50"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="3"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="4"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="5"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="6"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="7"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="8"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="75"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="9"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="10"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="11"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="12"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="13"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="14"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="15"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="16"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="17"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="18"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="19"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="20"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="21"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="22"><span class="cooldown-text"></span></div>
-          </div>
-
-          <div id="skills-group-6">
-            <div class="skill" data-icon="23"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="24"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="25"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="26"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="27"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="28"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="29"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="30"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="31"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="32"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="33"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="34"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="35"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="36"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="37"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="38"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="39"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="40"><span class="cooldown-text"></span></div>
-          </div>
-
-          <div id="skills-group-2">
-            <div class="skill" data-icon="41"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="42"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="43"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="44"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="45"><span class="cooldown-text"></span></div>
-            <div class="skill" data-icon="46"><span class="cooldown-text"></span></div>
+      <!-- //personajes -->
+      <!-- Lo intentamos hacer dinámico para que se actualice según lo que se seleccione pero si no se puede, pues bueno -->
+      <div id="character-circle">
+        <div id="secondary-health-container">
+          <div id="secondary-health-circle" style="background-image: url('media/Class_Paladin_Hotbar_Icon.png')">
           </div>
         </div>
+        <!-- Miércoles: queda esto -->
+        <div id="health-container">
+          <div id="health-circle" style="background-image: url('media/120px-Portrait_Shadowheart.png.webp')">
+            <span id="health-text">
+              <text>
+                  vidaActual / 100
+              </text>
+          </div>
+        </div>
+        <!-- Alex no se que has hecho aquí pero se rompe si se quita así que lo mantenemos -->
+
+        <!-- //items especiales y habilidades -->
+        <div id="grid-background">
+          <!-- //items especiales, son las armas al lado del perosnaje -->
+          <div id="special-items-container">
+            <div class="special-item" style="background-image: url('media/300px-Pike_+2_Faded.png.webp')"></div>
+            <div class="special-item" style="background-image: url('media/300px-Rusty_Hand_Crossbow_Faded.png.webp')"></div>
+          </div>
+
+          <!-- //habilidades e items -->
+          <div id="skills-container">
+            <div id="skills-group-8">
+              <div class="skill" data-icon="1"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="51"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="50"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="3"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="4"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="5"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="6"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="7"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="8"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="75"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="9"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="10"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="11"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="12"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="13"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="14"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="15"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="16"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="17"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="18"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="19"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="20"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="21"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="22"><span class="cooldown-text"></span></div>
+            </div>
+
+            <div id="skills-group-6">
+              <div class="skill" data-icon="23"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="24"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="25"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="26"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="27"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="28"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="29"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="30"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="31"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="32"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="33"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="34"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="35"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="36"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="37"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="38"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="39"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="40"><span class="cooldown-text"></span></div>
+            </div>
+
+            <div id="skills-group-2">
+              <div class="skill" data-icon="41"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="42"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="43"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="44"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="45"><span class="cooldown-text"></span></div>
+              <div class="skill" data-icon="46"><span class="cooldown-text"></span></div>
+            </div>
+          </div>
+        </div>
+
       </div>
 
     </div>

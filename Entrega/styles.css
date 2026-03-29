@@ -1,7 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&family=Libre+Bodoni:ital,wght@0,400..700;1,400..700&family=Poltawski+Nowy:ital,wght@0,400..700;1,400..700&display=swap');
+
 body {
   margin: 0;
   overflow: hidden;
-  /* font-family: sans-serif; */
+  font-family: "Libre Bodoni", serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+
+#menu-inicio {
+  position: absolute;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: auto;
+  opacity: 1;
+  transition: opacity 0.8s ease;
+}
+
+#menu-inicio.menu-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+/* Como realmente es una capa que se superpone, hay que tener en cuenta los pointer effects */
+
+#menu-inicio .fondo-menuinicio {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+}
+
+#menu-inicio .logo-menuinicio {
+  width: min(480px, 80%);
+  height: 220px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#menu-inicio .menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+#menu-inicio button {
+  min-width: 220px;
+  height: 50px;
+  padding: 0 28px;
+  border: 2px solid transparent;
+  border-image: linear-gradient(to bottom, #f5d97b, #d4af37 45%, #a67c35 75%, #8a5f1a) 1;
+  background: radial-gradient(circle at center, #7b4d2a 0%, #2d160b 55%, #000 100%);
+  color: rgb(247, 237, 237);
+  font-size: 20px;
+  font-family: "Libre Bodoni", serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+}
+
+#menu-inicio button:hover {
+  background: #8a5f1aa8;
+  transform: scale(1.02);
+}
+
+#gameplay {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+}
+
+#gameplay.visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* CONTENEDOR GENERAL */
@@ -29,7 +108,7 @@ body {
 .character-slot {
   width: 110px;
   height: 160px;
-  background: #333;
+  /* background: #333; DE CUYANDO HICIMOS LA GUÍA */
   border: 2px solid #888;
   pointer-events: auto;
   cursor: pointer;
@@ -61,47 +140,64 @@ body {
 
 .character-health {
   color: white;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   text-align: center;
   position: relative;
   z-index: 2;
 }
 
-/* -------------------- */
+
 /* MINIMAPA */
-/* -------------------- */
+
 #minimap-container {
   position: absolute;
   top: 20px;
   right: 20px;
-  width: 270px;
-  height: 270px;
+  width: 180px;
+  height: 180px;
   border-radius: 50%;
   overflow: hidden;
-  background: #222;
-  cursor: grab;
+  /* background: #222; de nuevo, de cuando hicimos la guía*/
   outline: 3px solid #FFD700;
-}
-
-#minimap-container:active {
-  cursor: grabbing;
+  pointer-events: none;
 }
 
 #minimap-image {
   position: absolute;
-  width: 180%;
-  height: 180%;
-  object-fit: contain;
-  object-position: center;
-  transform: translate(0, 0) rotate(0deg);
-  transition: transform 0.1s ease-out;
-  pointer-events: auto;
-  top: 50%;
-  left: 50%;
-  transform-origin: center center;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 200%; 
+  /* agrandarla para que sea tamaño "minimapa" y no mapa normal */
+  object-fit: cover;
+  animation: minimap-image-path 24s linear infinite;
+  pointer-events: none;
 }
 
+/* anim del minimapa simulando movimiento real */
+@keyframes minimap-image-path {
+  0% {
+    top: 0;
+    left: 0;
+  }
+  41.666% {
+    top: 0;
+    left: -100%;
+  }
+  75% {
+    top: -100%;
+    left: -100%;
+  }
+  100% {
+    top: 0;
+    left: 0;
+  }
+}
+/* investigar si esto es como un tween de godot/unity */
+
+/* no termina de funcionar :(*/
+/* 
 #niebla-overlay {
   position: absolute;
   inset: 0;
@@ -109,11 +205,10 @@ body {
   border-radius: 50%;
   z-index: 10;
   pointer-events: none;
-}
+} */
 
-/* -------------------- */
-/* BARRA INFERIOR */
-/* -------------------- */
+
+/* Barra inventario */
 #character-circle {
   position: absolute;
   bottom: 0;
@@ -133,6 +228,7 @@ body {
   margin-right: 8px; /* ajustado para acercarlo más al centro */
   margin-top: 32px; /* aumentado para bajar el círculo del paladin */
 }
+/* Aquí tuvimos dilema porque se cortaban las imágenes al ser un círculo, en el juego real pasa, a Inés le daba algo de TOC, lo probamos pero como la imagen era lo que era, se veía un margen por arriba */
 
 #secondary-health-circle {
   width: 100%;
@@ -140,7 +236,7 @@ body {
   border-radius: 50%;
   background: #115e7c;
   position: relative;
-  z-index: 20; /* poner por delante del círculo de vida */
+  z-index: 20; /* para que esté por delante del círculo de vida */
   overflow: hidden;
   background-size: cover;
   background-position: center;
@@ -167,6 +263,8 @@ body {
   box-shadow: 0 0 0 15px #000;
 }
 
+
+/* Simula un border radius con degradado pero lo hacemos con la resta entre capas */
 #health-circle::before {
   content: '';
   position: absolute;
@@ -180,6 +278,7 @@ body {
   -webkit-mask: 
     linear-gradient(#fff 0 0) content-box, 
     linear-gradient(#fff 0 0);
+  /* versión firefox por si acaso */
   mask: 
     linear-gradient(#fff 0 0) content-box, 
     linear-gradient(#fff 0 0);
@@ -207,7 +306,7 @@ body {
   width: 100%;
   height: 100%;
   background: rgba(255,0,0,0.25); /* 25% opacity */
-  transition: height 300ms ease; /* animación suave al cambiar vida */
+  transition: height 300ms ease; /* animación smooth al cambiar vida */
   pointer-events: none;
 }
 
@@ -283,8 +382,8 @@ body {
 .skill {
   width: 44px;
   height: 44px;
-  background: #444;
-  border: 2px solid #aaa;
+  /* background: #444; */
+  border: 2px solid #838383;
   pointer-events: auto;
   position: relative;
   display: flex;
@@ -301,24 +400,25 @@ body {
   background-color: #222;
 }
 
-/* Estilo para cualquier elemento en cooldown (skill o special-item) */
-.on-cooldown {
-  background: rgba(128, 128, 128, 0.5);
-}
 
+/* efecto para el cooldown visual*/
 .on-cooldown::after {
   content: '';
   position: absolute;
-  inset: 0;
-  background: rgba(100, 100, 100, 0.4);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--cooldown-fill-height, 100%);
+  background: rgba(65, 65, 65, 0.664);
   border-radius: 4px;
   z-index: 1;
   pointer-events: none;
+  transition: height 0.2s linear;
 }
 
 .cooldown-text {
   color: white;
-  font-size: 14px; /* algo más pequeño para ajustar */
+  font-size: 12px; /* algo más pequeño para ajustar */
   font-weight: bold;
   display: none;
   position: relative;
@@ -329,7 +429,7 @@ body {
   display: block;
 }
 
-/* Compatibilidad: si no usas subgrupos, mantén un grid por defecto (8x2 reducido a 8x3) */
+/* Compatibilidad: si no usas subgrupos, mantener un grid por defecto (8x2 reducido a 8x3) */
 #skills-container.default-grid {
   display: grid;
   grid-template-columns: repeat(8, 44px);
