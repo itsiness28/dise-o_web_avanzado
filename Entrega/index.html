@@ -35,10 +35,10 @@
 
     <!-- //personajes -->
     <div id="party-container">
-      <div class="character-slot"></div>
-      <div class="character-slot"></div>
-      <div class="character-slot"></div>
-      <div class="character-slot"></div>
+      <div class="character-slot active" style="background-image: url('media/120px-Portrait_Shadowheart.png.webp')"><span class="character-health"></span></div>
+      <div class="character-slot" style="background-image: url('media/120px-Portrait_Astarion.png.webp')"><span class="character-health"></span></div>
+      <div class="character-slot" style="background-image: url('media/120px-Portrait_Gale.png.webp')"><span class="character-health"></span></div>
+      <div class="character-slot" style="background-image: url('media/120px-Portrait_Karlach.png.webp')"><span class="character-health"></span></div>
     </div>
 
     <!-- //minimapa -->
@@ -48,8 +48,13 @@
 
     <!-- //personajes -->
     <div id="character-circle">
+      <div id="secondary-health-container">
+        <div id="secondary-health-circle" style="background-image: url('media/Class_Paladin_Hotbar_Icon.png')">
+        </div>
+      </div>
+
       <div id="health-container">
-        <div id="health-circle">
+        <div id="health-circle" style="background-image: url('media/120px-Portrait_Shadowheart.png.webp')">
           <span id="health-text">
             <text>
                 vidaActual / 100
@@ -57,24 +62,39 @@
         </div>
       </div>
 
-      <!-- //habilidades -->
-      <div id="skills-container">
-        <div class="skill"></div>
-        <div class="skill"></div>
-        <div class="skill"></div>
-        <div class="skill"></div>
-        <div class="skill"></div>
-      </div>
+      <!-- //items especiales y habilidades -->
+      <div id="grid-background">
+        <!-- //items especiales -->
+        <div id="special-items-container">
+          <div class="special-item" style="background-image: url('media/300px-Pike_+2_Faded.png.webp')"></div>
+          <div class="special-item" style="background-image: url('media/300px-Rusty_Hand_Crossbow_Faded.png.webp')"></div>
+        </div>
 
-      <!-- //items -->
-      <div id="items-container">
-        <div class="item"></div>
-        <div class="item"></div>
-        <div class="item"></div>
+        <!-- //habilidades e items -->
+        <div id="skills-container">
+        <div class="skill"><span class="cooldown-text"></span></div>
+        <div class="skill"><span class="cooldown-text"></span></div>
+        <div class="skill"><span class="cooldown-text"></span></div>
+        <div class="skill"><span class="cooldown-text"></span></div>
+        <div class="skill"><span class="cooldown-text"></span></div>
+        <div class="skill"><span class="cooldown-text"></span></div>
+        <div class="skill"><span class="cooldown-text"></span></div>
+        <div class="skill"><span class="cooldown-text"></span></div>
+        <div class="skill"><span class="cooldown-text"></span></div>
+        <div class="skill"><span class="cooldown-text"></span></div>
+        <div class="skill"><span class="cooldown-text"></span></div>
+        <div class="skill"><span class="cooldown-text"></span></div>
+        <div class="skill"><span class="cooldown-text"></span></div>
+        <div class="skill"><span class="cooldown-text"></span></div>
+        <div class="skill"><span class="cooldown-text"></span></div>
+        <div class="skill"><span class="cooldown-text"></span></div>
+      </div>
       </div>
 
     </div>
 
   </div>
+
+  <script src="interacciones.js"></script>
 </body>
 </html>
